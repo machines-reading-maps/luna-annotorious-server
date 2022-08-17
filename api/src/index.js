@@ -26,7 +26,7 @@ server.get('/', async (request, reply) => {
 
 const start = async () => {
   try {
-    await server.listen({ port: Config.API_PORT });
+    server.listen({ port: Config.API_PORT });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
