@@ -5,9 +5,9 @@
   "description": "An annotation server for the Luna/Machines Reading Maps web app",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/index.js",
+    "dev": "NODE_ENV=dev nodemon --exec babel-node src/index.js",
     "build": "babel src -d dist",
-    "start": "node dist/index.js"
+    "start": "NODE_ENV=prod node dist/index.js"
   },
   "repository": {
     "type": "git",
