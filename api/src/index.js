@@ -1,33 +1,14 @@
-import Fastify from 'fastify';
+import API from './API.js';
+import Config from './Config.js';
 
-import Config from './Config';
+import db from './db/index.js';
 
-import {
-  exists, 
-  initDB,
-  deleteById, 
-  findBySource, 
-  upsertAnnotation 
-} from './db';
-
-/** Init Fastify server **/
-const server = Fastify({});
-
-/** Init DB if needed **/
-exists().then(exists => {
-  if (!exists) {
-    initDB();
-  }
+db.exists().then(exists => {
+  if (!exists)
+    db.initDB();
 });
 
-server.get('/annotation/search', request =>
-  findBySource(request.query.source));
-
-server.post('/annotation', request =>
-  upsertAnnotation(request.body).then(() => ({ result: 'success' })));
-
-server.delete('/annotation/:annotationId', request =>
-  deleteById(`#${request.params.annotationId}`).then(() => ({ result: 'success' })));
+const server = API(db);
 
 const start = async () => {
   try {

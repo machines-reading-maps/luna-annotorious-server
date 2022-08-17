@@ -1,6 +1,7 @@
 import r from 'rethinkdb';
 
-import { DB_CONFIG } from '../Config';
+import { DB_CONFIG } from '../Config.js';
+import { deleteById, findBySource, upsertAnnotation } from './Annotation.js';
 
 export const exists = () =>
   r.connect(DB_CONFIG)
@@ -14,4 +15,13 @@ export const initDB = () =>
       .do(() => r.tableCreate('lock'))
       .run(conn));
 
-export * from './Annotation';
+export default {
+  // Lifecycle
+  exists,
+  initDB,
+
+  // Annotation CRUD
+  deleteById,
+  findBySource,
+  upsertAnnotation,
+}

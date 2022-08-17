@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 
-import { DB_CONFIG } from '../Config';
+import { DB_CONFIG } from '../Config.js';
 
 const conn = () => 
   r.connect(DB_CONFIG).then(conn => ({ conn, table: r.table('annotation') }));

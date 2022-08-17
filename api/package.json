@@ -4,10 +4,12 @@
   "private": true,
   "description": "An annotation server for the Luna/Machines Reading Maps web app",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon --exec babel-node src/index.js",
     "build": "babel src -d dist",
-    "start": "NODE_ENV=prod node dist/index.js"
+    "start": "NODE_ENV=prod node dist/index.js",
+    "test": "node test/API.test.js --experimental-specifier-resolution=[mode]"
   },
   "repository": {
     "type": "git",
