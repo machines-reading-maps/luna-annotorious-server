@@ -1,8 +1,10 @@
+import { test } from 'tap';
+
 import API from '../src/API.js';
 
 import MockDB from './MockDB.js';
 
-const test = async () => {
+test('requests the "/" route', async t => {
   const server = API(MockDB);
 
   const response = await server.inject({
@@ -10,8 +12,5 @@ const test = async () => {
     url: '/'
   });
 
-  console.log('status code: ', response.statusCode);
-  console.log('body: ', response.body);
-}
-
-test();
+  t.equal(response.statusCode, 404, 'returns a status code of 200');
+});
