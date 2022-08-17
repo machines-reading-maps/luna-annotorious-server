@@ -1,0 +1,36 @@
+{
+  "name": "luna-annotorious-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An annotation server for the Luna/Machines Reading Maps web app",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/index.js",
+    "build": "babel src -d dist",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/livia-ai/rate-this-triplet.git"
+  },
+  "author": "",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/livia-ai/rate-this-triplet/issues"
+  },
+  "homepage": "https://github.com/livia-ai/rate-this-triplet#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.17.3",
+    "fastify": "^4.4.0",
+    "request": "^2.88.2",
+    "rethinkdb": "^2.4.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "nodemon": "^2.0.15"
+  }
+}

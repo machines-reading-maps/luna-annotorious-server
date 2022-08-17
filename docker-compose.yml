@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  rethinkdb:
+    image: rethinkdb:2.4
+    # ports:
+    #  - 8081:8080
+    expose:
+      - 28015
+    restart: always
+    networks:
+      - net
+      
+  api: 
+    depends_on:
+      - rethinkdb
+    container_name: annotation-api
+    build: 
+      context: api
+      dockerfile: Dockerfile
+    expose:
+      - 5000
+    restart: always
+    networks:
+      - net
+
+  nginx:
+    depends_on: 
+      - api
+    container_name: nginx
+    image: nginx:latest
+    ports: 
+        - 80:80
+        - 443:443
+    restart: always
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./nginx/www/:/var/www/:rw
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - net
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+networks:
+  net:
