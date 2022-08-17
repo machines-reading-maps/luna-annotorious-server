@@ -20,9 +20,14 @@ exists().then(exists => {
   }
 });
 
-server.get('/', async (request, reply) => {
-  return { hello: 'world' }
-})
+server.get('/annotation/search', request =>
+  findBySource(request.query.source));
+
+server.post('/annotation', request =>
+  upsertAnnotation(request.body).then(() => ({ result: 'success' })));
+
+server.delete('/annotation/:annotationId', request =>
+  deleteById(`#${request.params.annotationId}`).then(() => ({ result: 'success' })));
 
 const start = async () => {
   try {
