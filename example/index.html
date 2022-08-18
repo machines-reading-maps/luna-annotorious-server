@@ -10,31 +10,41 @@
     <img id="hallstatt" src="640px-Hallstatt.jpg">
 
     <script>
+      function requestData(annotation, method = 'POST') {
+        return {
+          method,
+          mode: 'cors',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(annotation)
+        }
+      }
+
       window.onload = function() {
         var image = document.getElementById('hallstatt');
-
         var anno = Annotorious.init({ image });
 
         anno.on('createAnnotation', function (annotation) {
-          fetch('http://localhost/api/annotation', {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(annotation)
-          }).then(() => {
-            console.log('created', annotation);
-          });
+          fetch('http://localhost/api/annotation', requestData(annotation))
+            .then(() => {
+              console.log('created', annotation);
+            });
         });
 
         anno.on('updateAnnotation', function(annotation, previous) {
-          console.log('updated', previous, 'with', annotation);
+          fetch('http://localhost/api/annotation', requestData(annotation))
+            .then(() => {
+              console.log('updated', annotation);
+            });
         });
 
         anno.on('deleteAnnotation', function(annotation) {
-          console.log('deleted', annotation);
+          fetch('http://localhost/api/annotation/' + annotation.id, requestData(annotation, 'DELETE'))
+            .then(() => {
+              console.log('deleted', annotation);
+            });
         });
 
         anno.loadAnnotations('http://localhost/api/annotation/search?source=' + image.src);
