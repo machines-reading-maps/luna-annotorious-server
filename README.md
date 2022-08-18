@@ -5,7 +5,7 @@ built with [Fastify](https://www.fastify.io/) and
 [RethinkDB](https://rethinkdb.com/).
 
 
-## Development Mode
+## Development
 
 In development mode, you'll run RethinkDB as a Docker image, and the Fastify API via commandline.
 
@@ -38,3 +38,8 @@ $ docker-compose up
 ```
 
 The API is available at <http://localhost>. Note that the RethinkDB admin interface is __not__ exposed in production.
+
+## Using the Example
+
+The `/example` folder contains an example HTML file you can use to test the setup. Make sure the production deployment
+is running, and open `/example/index.html` in your browser.

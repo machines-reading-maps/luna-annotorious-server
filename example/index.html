@@ -11,10 +11,22 @@
 
     <script>
       window.onload = function() {
-        anno = Annotorious.init({ image: 'hallstatt' });
+        var image = document.getElementById('hallstatt');
+
+        var anno = Annotorious.init({ image });
 
         anno.on('createAnnotation', function (annotation) {
-          console.log('created', annotation);
+          fetch('http://localhost/api/annotation', {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(annotation)
+          }).then(() => {
+            console.log('created', annotation);
+          });
         });
 
         anno.on('updateAnnotation', function(annotation, previous) {
@@ -25,7 +37,7 @@
           console.log('deleted', annotation);
         });
 
-        // anno.loadAnnotations('annotations.w3c.json');
+        anno.loadAnnotations('http://localhost/api/annotation/search?source=' + image.src);
       }
     </script>
   </body>
