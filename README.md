@@ -40,7 +40,10 @@ $ docker-compose up
 The API is available at <http://localhost>. Note that the RethinkDB admin interface is __not__ exposed in production.
 
 <details>
-<summary>### HTTPS Setup</summary>
+
+<summary><strong>HTTPS Setup</strong></summary>
+
+<br/>
 
 Installation of HTTPS certificates via Certbot and LetsEncrypt is prepared in the Docker setup,
 but requires manual steps. The process is based on [this guide](https://mindsers.blog/post/https-using-nginx-certbot-docker/).
