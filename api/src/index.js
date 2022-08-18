@@ -1,7 +1,7 @@
-import API from './API.js';
-import Config from './Config.js';
+import API from './API';
+import Config from './Config';
 
-import db from './db/index.js';
+import db from './db';
 
 db.exists().then(exists => {
   if (!exists)

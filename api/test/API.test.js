@@ -1,10 +1,7 @@
-import { test } from 'tap';
+import API from '../src/API';
+import MockDB from './MockDB';
 
-import API from '../src/API.js';
-
-import MockDB from './MockDB.js';
-
-test('requests the "/annotation/search" route', async t => {
+test('requests the "/annotation/search" route', async () => {
   const server = API(MockDB);
 
   const response = await server.inject({
@@ -12,10 +9,10 @@ test('requests the "/annotation/search" route', async t => {
     url: '/annotation/search?source=http://example.com/images/001'
   });
 
-  t.equal(response.statusCode, 200, 'returns a status code of 200');
+  expect(response.statusCode).toBe(200);
 });
 
-test('requests the "/annotation" POST method', async t => {
+test('requests the "/annotation" POST method', async () => {
   const server = API(MockDB);
 
   const response = await server.inject({
@@ -23,10 +20,10 @@ test('requests the "/annotation" POST method', async t => {
     url: '/annotation'
   });
 
-  t.equal(response.statusCode, 200, 'returns a status code of 200');
+  expect(response.statusCode).toBe(200);
 });
 
-test('requests the "/annotation" DELETE method', async t => {
+test('requests the "/annotation" DELETE method', async () => {
   const server = API(MockDB);
   
   const response = await server.inject({
@@ -34,5 +31,5 @@ test('requests the "/annotation" DELETE method', async t => {
     url: '/annotation/ceabd881-06cb-4d6e-a5c6-3490a7931bc7'
   });
 
-  t.equal(response.statusCode, 200, 'returns a status code of 200');
+  expect(response.statusCode).toBe(200);
 });

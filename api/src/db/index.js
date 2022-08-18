@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 
-import { DB_CONFIG } from '../Config.js';
-import { deleteById, findBySource, upsertAnnotation } from './Annotation.js';
+import { DB_CONFIG } from '../Config';
+import { deleteById, findBySource, upsertAnnotation } from './Annotation';
 
 export const exists = () =>
   r.connect(DB_CONFIG)
