@@ -12,7 +12,6 @@ export const initDB = () =>
   r.connect(DB_CONFIG).then(conn =>
     r.dbCreate(DB_CONFIG.db)
       .do(() => r.tableCreate('annotation'))
-      .do(() => r.tableCreate('lock'))
       .run(conn));
 
 export default {

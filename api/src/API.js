@@ -10,7 +10,7 @@ const API = (db, opts = {}) => {
     db.upsertAnnotation(request.body).then(() => ({ result: 'success' })));
 
   server.delete('/annotation/:annotationId', request =>
-    db.deleteById(`#${request.params.annotationId}`).then(() => ({ result: 'success' })));
+    db.deleteById(request.params.annotationId).then(() => ({ result: 'success' })));
 
   return server;
 }

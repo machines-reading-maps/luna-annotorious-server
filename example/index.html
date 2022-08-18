@@ -10,7 +10,12 @@
     <img id="hallstatt" src="640px-Hallstatt.jpg">
 
     <script>
+      var API_URL = 'http://localhost/api/annotation';
+
       function requestData(annotation, method = 'POST') {
+        // Server won't work with local hash-IDs - clip to absolute UUID!
+        annotation.id = annotation.id.replace('#', '');
+
         return {
           method,
           mode: 'cors',
@@ -27,21 +32,23 @@
         var anno = Annotorious.init({ image });
 
         anno.on('createAnnotation', function (annotation) {
-          fetch('http://localhost/api/annotation', requestData(annotation))
+          fetch(API_URL, requestData(annotation))
             .then(() => {
               console.log('created', annotation);
             });
         });
 
         anno.on('updateAnnotation', function(annotation, previous) {
-          fetch('http://localhost/api/annotation', requestData(annotation))
+          fetch(API_URL, requestData(annotation))
             .then(() => {
               console.log('updated', annotation);
             });
         });
 
         anno.on('deleteAnnotation', function(annotation) {
-          fetch('http://localhost/api/annotation/' + annotation.id, requestData(annotation, 'DELETE'))
+          const url = API_URL + '/' + annotation.id.replace('#', '');
+
+          fetch(url, requestData(annotation, 'DELETE'))
             .then(() => {
               console.log('deleted', annotation);
             });
