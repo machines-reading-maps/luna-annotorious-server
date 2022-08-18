@@ -40,13 +40,14 @@ $ docker-compose up
 The API is available at <http://localhost>. Note that the RethinkDB admin interface is __not__ exposed in production.
 
 <details>
-<summary>HTTPS Setup</summary>
+<summary>### HTTPS Setup</summary>
+
 Installation of HTTPS certificates via Certbot and LetsEncrypt is prepared in the Docker setup,
 but requires manual steps. The process is based on [this guide](https://mindsers.blog/post/https-using-nginx-certbot-docker/).
 
 In the CLI-commands below, replace `annotation-server.rainersimon.io` with the domain name of your server.
 
-### 1. Test if the setup works correctly
+#### 1. Test if the setup works correctly
 
 ```sh
 docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d annotation-server.rainersimon.io
