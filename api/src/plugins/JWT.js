@@ -1,11 +1,10 @@
 import fp from 'fastify-plugin';
-import JWT from '@fastify/jwt';
+import jwt from '@fastify/jwt';
 
 import Config from '../Config';
 
 module.exports = fp(function (fastify, opts, done) {
-
-  fastify.register(JWT, {
+  fastify.register(jwt, {
     secret: Config.AUTH_SECRET,
     cookie: {
       cookieName: 'token',

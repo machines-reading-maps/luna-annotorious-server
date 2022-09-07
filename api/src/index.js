@@ -1,7 +1,7 @@
 import API from './API';
 import Config from './Config';
 
-import db from './db';
+import db from './database';
 
 db.exists().then(exists => {
   if (!exists)
