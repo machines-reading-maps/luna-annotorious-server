@@ -1,12 +1,12 @@
 import fp from 'fastify-plugin';
 import jwt from '@fastify/jwt';
 
-import Config from '../Config';
+import Config from '../config';
 
 /**
  * Adds authentication middleware based on a JWT cookie.
  */
-const JWTAuthenticationPlugin = fp(function (fastify, _, done) {
+const JWTAuthenticatePlugin = fp(function (fastify, _, done) {
   fastify.register(jwt, {
     secret: Config.AUTH_SECRET,
     cookie: {
@@ -26,4 +26,4 @@ const JWTAuthenticationPlugin = fp(function (fastify, _, done) {
   done();
 });
 
-export default JWTAuthenticationPlugin;
+export default JWTAuthenticatePlugin;

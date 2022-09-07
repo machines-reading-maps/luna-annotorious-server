@@ -1,5 +1,5 @@
-import API from './API';
-import Config from './Config';
+import API from './api';
+import Config from './config';
 
 import db from './database';
 
