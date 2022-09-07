@@ -15,7 +15,7 @@ const start = async () => {
     server.listen({ port: Config.API_PORT, host: '0.0.0.0' });
     console.log(`Started server on port ${Config.API_PORT}`);
   } catch (err) {
-    server.log.error(err);
+    console.error(err);
     process.exit(1);
   }
 }
