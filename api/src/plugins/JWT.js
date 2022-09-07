@@ -3,7 +3,10 @@ import jwt from '@fastify/jwt';
 
 import Config from '../Config';
 
-module.exports = fp(function (fastify, opts, done) {
+/**
+ * Adds authentication middleware based on a JWT cookie.
+ */
+const JWTAuthenticationPlugin = fp(function (fastify, _, done) {
   fastify.register(jwt, {
     secret: Config.AUTH_SECRET,
     cookie: {
@@ -14,11 +17,13 @@ module.exports = fp(function (fastify, opts, done) {
 
   fastify.decorate('authenticate', async (request, reply) => {
     try {
-      await request.jwtVerify()
+      await request.jwtVerify();
     } catch (err) {
-      reply.send(err)
+      reply.send(err);
     }
   });
 
   done();
 });
+
+export default JWTAuthenticationPlugin;

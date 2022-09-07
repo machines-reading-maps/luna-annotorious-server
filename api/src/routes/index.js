@@ -11,21 +11,19 @@ module.exports = (server, options, done) => {
     }).code(200).send({ token });
   });
 
-  server.get('/me', { onRequest: [ server.authenticate ] }, req => {
+  server.get('/me', { onRequest: [ server.authenticate, server.authorize ] }, req => {
     // TODO retrieve the token and return username
-    return 'Hello World';
+    return { ...req.user };
   });
 
   server.get('/annotation/search', req =>
     db.findBySource(req.query.source));
 
-  server.post('/annotation', req =>
+  server.post('/annotation', { onRequest: [ server.authenticate ] }, req =>
     db.upsertAnnotation(req.body).then(() => ({ result: 'success' })));
 
-  server.delete('/annotation/:annotationId', req =>
+  server.delete('/annotation/:annotationId', { onRequest: [ server.authenticate ] }, req =>
     db.deleteById(req.params.annotationId).then(() => ({ result: 'success' })));
-
-  server.get('/', req => ({ ...req.user }));
 
   done();
   
