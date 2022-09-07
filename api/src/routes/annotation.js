@@ -1,4 +1,4 @@
-module.exports = (server, options, done) => {
+const AnnotationRoutes = (server, options, done) => {
 
   const { db } = options;
   
@@ -28,3 +28,5 @@ module.exports = (server, options, done) => {
   done();
   
 }
+
+export default AnnotationRoutes;
