@@ -1,5 +1,5 @@
-import API from '../src/API';
-import MockDB from './MockDB';
+import API from '../src/api';
+import MockDB from './mockdb';
 
 const getToken = server => 
   ({ token: server.jwt.sign({ id: 'https://rainersimon.io/users/rainer', fullname: 'Rainer Simon' }) });
