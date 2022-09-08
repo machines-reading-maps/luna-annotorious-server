@@ -5,6 +5,8 @@ services:
     image: rethinkdb:2.4
     expose:
       - 28015
+    ports:
+      - 8080:8080
     restart: always
     networks:
       - net
