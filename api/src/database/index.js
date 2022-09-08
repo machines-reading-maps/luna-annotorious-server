@@ -11,7 +11,7 @@ const exists = () =>
 const initDB = () =>
   r.connect(DB_CONFIG).then(conn =>
     r.dbCreate(DB_CONFIG.db)
-      .do(() => r.tableCreate('annotation'))
+      .do(() => r.tableCreate('annotation', { primaryKey: 'pid' }))
       .run(conn));
 
 export default {
