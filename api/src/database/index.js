@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 
 import { DB_CONFIG } from '../config';
-import { deleteById, findBySource, upsertAnnotation } from './annotation';
+import { deleteById, findBySource, findBySourceForUser, upsertAnnotation } from './annotation';
 
 const exists = () =>
   r.connect(DB_CONFIG)
@@ -22,5 +22,6 @@ export default {
   // Annotation CRUD
   deleteById,
   findBySource,
+  findBySourceForUser,
   upsertAnnotation,
 }

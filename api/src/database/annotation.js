@@ -24,3 +24,13 @@ export const findBySource = source =>
       .filter({ target: { source }})
       .run(conn))
     .then(cursor => cursor.toArray());
+
+export const findBySourceForUser = (source, user) =>
+  conn()
+    .then(({ conn, table}) => table
+      .filter(annotation =>
+        annotation('target')('source').eq(source)
+          .and(
+            annotation('body').contains(body => body('creator')('id').eq(user))))
+      .run(conn))
+    .then(cursor => cursor.toArray());

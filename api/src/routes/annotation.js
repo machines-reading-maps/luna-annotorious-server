@@ -16,8 +16,8 @@ const AnnotationRoutes = (server, options, done) => {
     return { ...req.user };
   });
 
-  server.get('/annotation/search', req =>
-    db.findBySource(req.query.source));
+  server.get('/annotation/search', { onRequest: [ server.authenticate, server.authorize ] }, req =>
+    db.findBySourceForUser(req.query.source, req.user.id));
 
   server.post('/annotation', { onRequest: [ server.authenticate ] }, req =>
     db.upsertAnnotation(req.body).then(() => ({ result: 'success' })));
