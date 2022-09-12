@@ -3,12 +3,26 @@ const AnnotationRoutes = (server, options, done) => {
   const { db } = options;
   
   /** Just gets a dummy token for testing **/
-  server.get('/login', (req, res) => {
-    const token = server.jwt.sign({ id: 'https://rainersimon.io/users/rainer', fullname: 'Rainer Simon' });
+  server.post('/login', (req, res) => {
+    const { accessToken } = req.body;
+    
+    if (accessToken) {
+      try {
+        // This will fail if the token could not be verified
+        // against the secret
+        const payload = server.jwt.verify(accessToken);
 
-    res.setCookie('token', token, {
-      // TODO needs extra params for security!
-    }).code(200).send({ token });
+        res.setCookie('auth', accessToken, {
+          httpOnly: true,
+          sameSite: 'strict'
+        }).code(200).send({ user: payload.sub });  
+      } catch (error) {
+        console.log(error);
+        res.code(401).send({ error: 'Not Authorized' });
+      }
+    } else {
+      res.code(401).send({ error: 'Not Authorized' });      
+    }
   });
 
   server.get('/me', { onRequest: [ server.authenticate, server.authorize ] }, req => {

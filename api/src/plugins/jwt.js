@@ -8,9 +8,9 @@ import Config from '../config';
  */
 const JWTAuthenticatePlugin = fp(function (fastify, _, done) {
   fastify.register(jwt, {
-    secret: Config.AUTH_SECRET,
+    secret: Buffer.from(Config.AUTH_SECRET, 'base64'),
     cookie: {
-      cookieName: 'token',
+      cookieName: 'auth',
       signed: false
     }
   });
