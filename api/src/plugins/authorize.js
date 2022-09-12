@@ -11,7 +11,7 @@ const AuthorizePlugin = fp(function (fastify, options, done) {
     try {
       // TODO if this is a new annotation, check if all bodies are from this user
       // TODO if this is an update, compute diff - check if modified bodies are from this user
-      console.log('authorize', request.user);
+      // console.log('authorize', request.user);
     } catch (err) {
       reply.send(err)
     }
