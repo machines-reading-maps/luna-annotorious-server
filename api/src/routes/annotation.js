@@ -25,9 +25,6 @@ const AnnotationRoutes = (server, options, done) => {
     }
   });
 
-  server.get('/logout', (req, res) =>
-    res.clearCookie('auth').code(200).send({ message: 'You are logged out'}));
-
   server.get('/annotation/search', { onRequest: [ server.authenticate, server.authorize ] }, req =>
     db.findBySourceForUser(req.query.source, req.user.sub));
 
