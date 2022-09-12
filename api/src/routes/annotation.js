@@ -26,13 +26,13 @@ const AnnotationRoutes = (server, options, done) => {
   });
 
   server.get('/annotation/search', { onRequest: [ server.authenticate, server.authorize ] }, req =>
-    db.findBySourceForUser(req.query.source, req.user.sub));
+    db.findBySourceAndUser(req.query.source, req.user.sub));
 
   server.post('/annotation', { onRequest: [ server.authenticate ] }, req =>
-    db.upsertAnnotation(req.body).then(() => ({ result: 'success' })));
+    db.upsertAnnotation(req.body, req.user.sub).then(() => ({ result: 'success' })));
 
   server.delete('/annotation/:annotationId', { onRequest: [ server.authenticate ] }, req =>
-    db.deleteById(req.params.annotationId).then(() => ({ result: 'success' })));
+    db.deleteByIdAndUser(req.params.annotationId).then(() => ({ result: 'success' })));
 
   done();
   

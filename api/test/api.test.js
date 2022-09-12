@@ -2,17 +2,20 @@ import API from '../src/api';
 import MockDB from './mockdb';
 
 const getToken = server => 
-  ({ token: server.jwt.sign({ id: 'https://rainersimon.io/users/rainer', fullname: 'Rainer Simon' }) });
+  ({ token: server.jwt.sign({ id: 'rainer' }) });
 
 test('requests the "/annotation/search" route', async () => {
   const server = API(MockDB);
 
-  const response = await server.inject({
-    method: 'GET',
-    url: '/annotation/search?source=http://example.com/images/001'
-  });
+  server.after(async () => {
+    const response = await server.inject({
+      method: 'GET',
+      url: '/annotation/search?source=http://example.com/images/001',
+      cookies: getToken()
+    });
 
-  expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(200);
+  });
 });
 
 test('requests the "/annotation" POST method', async () => {
