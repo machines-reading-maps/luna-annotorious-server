@@ -34,6 +34,9 @@ const AnnotationRoutes = (server, options, done) => {
   server.delete('/annotation/:annotationId', { onRequest: [ server.authenticate ] }, req =>
     db.deleteByIdAndUser(req.params.annotationId).then(() => ({ result: 'success' })));
 
+  server.get('/time', { onRequest: [ server.authenticate ] }, req =>
+    ({ timestamp: new Date().getTime() }));
+
   done();
   
 }
