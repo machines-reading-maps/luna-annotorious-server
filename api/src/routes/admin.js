@@ -1,6 +1,12 @@
 const AdminRoutes = (server, options, done) => {
 
-  // TODO admin API
+  const { db } = options;
+
+  server.get('/admin/recent', () => {
+    // TODO make 'since' configurable
+    const twoWeeksAgo = new Date(Date.now() - 12096e5);
+    return db.listRecent(twoWeeksAgo);
+  });
 
   done();
 

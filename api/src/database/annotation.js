@@ -5,67 +5,88 @@ import { DB_CONFIG } from '../config';
 const conn = () => 
   r.connect(DB_CONFIG).then(conn => ({ conn, table: r.table('annotation') }));
 
+// Helper to strip the 'key' and 'lastUpdated' fields, which are for internal
+// use only
+const removeInternalFields = record => {
+  const { key, lastUpdated, ...annotation } = record;
+  return annotation;
+}
 
-/** Internal CRUD helpers **/
-const deleteAnnotation = pid =>
-  conn()
+
+/**
+ * INSERTS AN ANNOTATION INTO THE DB. Uniqueness is enforced on 
+ * the combination of annotation ID + user ID. Which means that
+ * there can be multiple annotations with the same ID in the database!
+ * But only one for any given user. 
+ * 
+ * In case an annotation with the given ID + user ID already exists,
+ * the previous version is replaced.
+ */
+export const upsertAnnotation = (annotation, userId) => {
+  // Database creates a 'compound key' (annotation ID + user ID)
+  // for uniqueness, plus records last update timestamp
+  const record = {
+    key: `${annotation.id}.${userId}`,
+    lastUpdated: new Date(), 
+    ...annotation
+  }
+
+  return conn()
     .then(({ conn, table }) => table
-      .get(pid)
-      .delete()
+      .insert(record, { conflict: 'replace' })
       .run(conn));
-
-const insertAnnotation = annotation =>
-  conn()
-    .then(({ conn, table }) => table
-      .insert(annotation, { conflict: 'replace' })
-      .run(conn));
+}
 
 
-/** API **/
-export const upsertAnnotation = (annotation, user) =>
-  findByIdAndUser(annotation.id, user).then(existing => {
-    if (existing.length > 1) {
-      // Means that our hand-rolled uniqueness constraint has been overridden
-      console.warn(`Too many annotations for ${user}, ${annotation}`);
-    }
-
-    // Delete existing
-    if (existing.length > 0) {
-      // One or more existing: delete, then insert
-      return Promise.all(existing.map(annotation => deleteAnnotation(annotation.pid)))
-        .then(() => insertAnnotation(annotation));
-    } else {
-      // No existing - insert
-      return insertAnnotation(annotation);
-    }
-  });
-
-export const findByIdAndUser = (id, user) =>
+/**
+ * RETRIEVES AN ANNOTATION BY ANNOTATION ID AND USER ID.
+ */
+export const findByIdAndUser = (id, userId) =>
   conn()
     .then(({ conn, table}) => table
       .filter(annotation =>
         annotation('id').eq(id)
           .and(
-            annotation('body').contains(body => body('creator')('id').eq(user))))
+            annotation('body').contains(body => body('creator')('id').eq(userId))))
       .run(conn))
-    .then(cursor => cursor.toArray());
+    .then(cursor => cursor.toArray().map(removeInternalFields));
 
-export const findBySourceAndUser = (source, user) =>
+
+/**
+ * LISTS ANNOTATIONS FOR A GIVEN SOURCE URL AND USER ID.
+ */
+export const findBySourceAndUser = (source, userId) =>
   conn()
     .then(({ conn, table}) => table
       .filter(annotation =>
         annotation('target')('source').eq(source)
           .and(
-            annotation('body').contains(body => body('creator')('id').eq(user))))
+            annotation('body').contains(body => body('creator')('id').eq(userId))))
       .run(conn))
-    .then(cursor => cursor.toArray());
+    .then(cursor => cursor.toArray().map(removeInternalFields));
 
-export const deleteByIdAndUser = (id, user) =>
+
+/**
+ * DELETES AN ANNOTATION FOR A GIVEN ANNOTATION ID AND USER ID.
+ */    
+export const deleteByIdAndUser = (id, userId) =>
   conn()
     .then(({ conn, table}) => table
       .filter(annotation =>
         annotation('id').eq(id)
           .and(
-            annotation('body').contains(body => body('creator')('id').eq(user))))
+            annotation('body').contains(body => body('creator')('id').eq(userId))))
       .delete()
       .run(conn));
+
+      
+/**
+ * LISTS ALL ANNOTATIONS CREATED OR UPDATED SINCE THE GIVEN DATE.
+ */
+export const listRecent = since =>
+  conn()
+    .then(({ conn, table}) => table
+      .filter(annotation =>
+        annotation('lastUpdated').date().during(since, r.now()))
+    .run(conn))
+    .then(cursor => cursor.toArray().map(removeInternalFields));
