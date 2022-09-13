@@ -31,10 +31,14 @@ In normal production deployment, you'll run the whole stack with Docker. The app
 - The Fastify API server
 - NGINX as a frontend proxy
 
-In the root folder, run:
+First, configure the application secret that is used to verify auth tokens. The secret is shared between the Annotorious
+server and Luna. 
+
+- Create a copy of the file `api/.env.prod.example` named `api/.env.prod`. Change the `AUTH_SECRET` variable in the file.
+- Then, in the root folder, run:
 
 ```sh
-$ docker-compose up
+$ docker-compose up --build
 ```
 
 The API is available at <http://localhost>. Note that the RethinkDB admin interface is __not__ exposed in production.
