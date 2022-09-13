@@ -73,8 +73,3 @@ docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/cert
 - Edit NGINX config file in `nginx/conf/default.conf` and uncomment the HTTPS config block.
 - Restart everything with `docker-compose up --build`
 </details>
-
-## Using the Example
-
-The `/example` folder contains an example HTML file you can use to test the setup. Make sure the production deployment
-is running, and open `/example/index.html` in your browser.
