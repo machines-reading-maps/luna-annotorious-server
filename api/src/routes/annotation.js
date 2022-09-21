@@ -29,7 +29,9 @@ const AnnotationRoutes = (server, options, done) => {
     db.findBySourceAndUser(req.query.source, req.user.sub));
 
   server.post('/annotation', { onRequest: [ server.authenticate ] }, req =>
-    db.upsertAnnotation(req.body, req.user.sub).then(() => ({ result: 'success' })));
+    db.upsertAnnotation(req.body, req.user.sub)
+      .then(() => ({ result: 'success' }))
+      .catch(error => console.error(error)));
 
   server.delete('/annotation/:annotationId', { onRequest: [ server.authenticate ] }, req =>
     db.deleteByIdAndUser(req.params.annotationId).then(() => ({ result: 'success' })));
